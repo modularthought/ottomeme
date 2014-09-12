@@ -1,0 +1,151 @@
+@font-face {
+	font-family: 'xkcd_beanish-Regular';
+    font-weight: normal;
+	font-style: normal;
+    src: url('../xkcd_beanish-Regular.woff') format('woff'),
+         url('../xkcd_beanish-Regular.otf') format('opentype'),
+         url('../xkcd_beanish-Regular.ttf') format('truetype');
+	src: local('xkcd-beanish'), url('../xkcd_beanish-Regular.woff') format('woff');
+}
+/*
+    src: url('../xkcd-Regular.eot');
+	src: local('xkcd-beanish'), url('../xkcd_beanish-Regular.woff') format('woff');
+    src: url('../xkcd-Regular.eot?#iefix') format('embedded-opentype'),
+         url('../xkcd-Regular.woff') format('woff'),
+         url('../xkcd-Regular.otf') format('opentype'),
+         url('../xkcd-Regular.ttf') format('truetype'),
+         url('../xkcd-Regular.svg#codexRegular') format('svg');
+         */
+body {
+	font-size: 15px; line-height: 19px; font-family: 'xkcd-beanish', 'xkcd_beanish-Regular', xkcd, sans-serif;
+}
+a#clickmeme:focus {
+	outline: none;
+}
+h1 {
+	text-align: center; font-weight: normal;
+}
+h1, #memetxt {
+	font-family: 'xkcd-beanish', 'xkcd_beanish-Regular', xkcd, sans-serif;
+}
+#tellmeme {
+	float: left;
+	margin-top: 9px; margin-right: -9px;
+}
+#memeblock {
+	display: inline-block;
+	width: 553px; height: 395px; margin: 9px;
+	position: relative; top: 0; left: 0;
+	overflow: hidden;
+}
+/*#memeblock * {
+	transform: scale(1.2);
+}*/
+#memeoverlay {
+	width:553px; height:395px;
+	position: absolute; top: 0px; left: 0px; z-index: 50;
+}
+img#memeframe {
+	vertical-align: top;
+}
+#memeline {
+	position: absolute; top: 2px; left: 2px;
+}
+#memeloc {
+	height: 24px;
+	height: 7em;
+	height: auto;
+	width: 538px; margin: 10px 5px 3px;
+	position: absolute; top: 2px; left: 2px;
+	text-align: center; font-size: 1em; color: rgb(0, 0, 0);
+	overflow: hidden;
+	overflow: visible;
+}
+#memetxt {
+	position: absolute; left: 0px; right: 0px; bottom: auto;
+	background: none;
+	background-color: rgba(221,221,221,0.75); border-radius: 5px;
+}
+#memetxt strong {
+	/*font-weight: normal; font-size: 1.2em;*/
+}
+#sharing, #settings {
+	position: relative;
+	border-top: 2px solid rgb(221,221,221);
+}
+#bbblock, #options {
+	font-family: sans-serif;
+	width: 553px;
+	position: relative; margin-left: auto; margin-right: auto; left: 0; right: 0;
+}
+#bbcode {
+	height: 5em;
+}
+#bbblock h2 {
+	margin-bottom: 0.1em;
+}
+#bbselect {
+	position: absolute; right: 0; top: 0;
+}
+textarea {
+	clear: both;
+	font-family: monospace;
+	width: 553px; resize: vertical;
+}
+.smallcap {
+	font-size: smaller;
+}
+.oohfloat {
+	position: relative;
+}
+#navbtns {
+	margin: 0 auto 1em; width: 4.7em;
+}
+#options label[title] {
+	position: relative;
+	cursor: help;
+}
+#options label[title]:hover::after,
+ #clickmeme:hover::after,
+  #memeoverlay:hover::after {
+	content: attr(title);
+	position: fixed;
+	right: 10px;
+	top: 10px;
+	text-align: center;
+	border: 1px #aaa solid;
+	border-radius: 5px;
+	background-color: #ffc;
+	padding: 5px;
+	color: #000;
+	font-size: 0.8em;
+	z-index: 1;
+}
+#clickmeme:hover::after {
+	right: auto;
+	left: 10px;
+}
+#memeoverlay:hover::after {
+	position: absolute;
+	right: auto; left: 50%; margin-left: -2em;
+	top: auto; bottom: 0.5em;
+}
+/* SVG styles */
+#memeline path {
+	stroke-width: 1.5; stroke: #222; fill: none;
+}
+/* xkcd fora spoiler */
+.spoiler {
+	margin:20px; margin-top:5px;
+}
+.spoiler .quotetitle, .spoiler .quotetitle * {
+	font-family: Verdana,Helvetica,Arial,sans-serif;
+	font-size: 10px;
+	margin: 0; padding: 0;
+}
+.spoiler input {
+	position: relative; z-index: 100;
+	width:45px; font-size:10px; margin:0px; padding:0px;
+	vertical-align: middle;
+	font-family: Verdana,Helvetica,Arial,sans-serif;
+}
