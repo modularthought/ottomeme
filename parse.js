@@ -1,9 +1,16 @@
-OTToMeme.mod.parse = true;
+OTToMeme.mod.parse = true; /* this indicates this mod to be in effect. */
+	/* when checking for it it will be false/null if this module is not included. */
 OTToMeme.retrieve = function (file,callback,manifest) {
 	if (OTToMeme.online && 'localStorage' in window && window.localStorage !== null && window.localStorage[file]) {
+		/* extra online check to circumvent offline Chrome error */
+		/* check for localStorage feature and if this filename is stored there */
 		if (OTToMeme.manifest[manifest] !== window.localStorage[manifest]) {
+			/* now check if that file is up to date */
+			/* assign date to storage and continue xhr request for new file */
 			window.localStorage[manifest] = OTToMeme.manifest[manifest];
 		} else {
+			/* file is the same, simply run callback (with the stored string) and execute,
+			   and return (null) to prevent new xhr request */
 			callback(window.localStorage[file]);
 			OTToMeme.execute();
 			return;
@@ -13,7 +20,9 @@ OTToMeme.retrieve = function (file,callback,manifest) {
 	xhr.open('GET',file,true);
 	xhr.onreadystatechange = function(){
 		if (xhr.readyState === 4) {
+			/* when file is ready, run callback and execute */
 			if (OTToMeme.online && 'localStorage' in window && window.localStorage !== null) {
+				/* if localStorage available also store response as a string for subsequent use */
 				window.localStorage[file] = xhr.responseText;
 			}
 			callback(xhr.responseText);
@@ -21,12 +30,19 @@ OTToMeme.retrieve = function (file,callback,manifest) {
 		};
 	};
 	xhr.send(null);
+		/* get new xhr request */
+}
+OTToMeme.seeModifiers = function(e){
+	console.log(e.altKey || e.shiftKey || e.ctrlKey)
+	document.removeEventListener('keydown', OTToMeme.seeModifiers, false);
 }
 OTToMeme.execute = function(){
 	if (OTToMeme.mod.html && OTToMeme.queue-- == 0) {
 		if (OTToMeme.mod.history) OTToMeme.addNav();
+		OTToMeme.trackdip.lefth = OTToMeme.trackdip.length;
 		OTToMeme.setSnowCap();
 		OTToMeme.cm.addEventListener('click', function(e){
+			// document.addEventListener('keydown', OTToMeme.seeModifiers, false);
 			if (e.preventDefault) e.preventDefault();
 			e.cancelBubble = false;
 			OTToMeme.cm.blur();
@@ -56,8 +72,8 @@ OTToMeme.fillBlanks = function(){
 	var reBracket = /^\s*\[[^\]]+\]/;
 	for (var x in this.memes.class) {
 	/* expand class (and not other) groups */
-		var memex = this.memes.class[x];
-		var rem = [];
+		var memex = this.memes.class[x]
+		, rem = [];
 		for (var i = 0, mlen = memex.length; i < mlen; i++) {
 		/* check each entry for [] to expand */
 			var memexi = memex[i];
@@ -91,9 +107,9 @@ OTToMeme.padWordList = function(wordlist, add){
 }
 OTToMeme.returnSingular = function(words){
 	var words = words.split(/\s*,\s*/)
-	var art = [], noart = [];
-	for (var i = 0; i < words.length; i++) {
-		var word = (/^AN? /i.test(words[i]) ? [words[i].split(' ')[0], words[i].split(' ').slice(1).join(' ')] : ['A',words[i]]);
+	, art = [], noart = [];
+	for (var i = 0, word; i < words.length; i++) {
+		word = (/^AN? /i.test(words[i]) ? [words[i].split(' ')[0], words[i].split(' ').slice(1).join(' ')] : ['A',words[i]]);
 		art.push(word[0]);
 		noart.push(word[1]);
 	};
@@ -101,21 +117,21 @@ OTToMeme.returnSingular = function(words){
 }
 OTToMeme.returnPlural = function(words,inf){
 	/* This can be supplanted by returnConj because plural conjugates the same as verb present */
-	var pluralExists = !!words[1];
-	var words = words[1] ? words[1] : inf.join(',');
+	var pluralExists = !!words[1]
+	, words = words[1] ? words[1] : inf.join(',');
 	words = words.split(/\s*,\s*/);
-	for (var i = 0, plural = []; i < words.length; i++) {
-		var word = (/^AN? /i.test(words[i]) ? words[i].split(' ').slice(1).join(' ') : words[i]);
+	for (var i = 0, plural = [], word; i < words.length; i++) {
+		word = (/^AN? /i.test(words[i]) ? words[i].split(' ').slice(1).join(' ') : words[i]);
 		plural.push( pluralExists ? word : word.replace(/Y(\W)?$/,'IE$1').replace(/(\W)?$/,'S$1') );
 	}
 	return plural;
 }
 OTToMeme.returnConj = function(words,inf,c){
-	var conjExists = !!words[c];
-	var words = words[c] ? words[c] : inf.join(',');
+	var conjExists = !!words[c]
+	, words = words[c] ? words[c] : inf.join(',');
 	words = words.split(/\s*,\s*/);
-	for (var i = 0, conj = []; i < words.length; i++) {
-		var word = (/^AN? /i.test(words[i]) ? words[i].split(' ').slice(1).join(' ') : words[i]);
+	for (var i = 0, conj = [], word; i < words.length; i++) {
+		word = (/^AN? /i.test(words[i]) ? words[i].split(' ').slice(1).join(' ') : words[i]);
 		switch (c) {
 			// no longer used: switched case 1 and 2 so that var c works with plural(s) as well.
 			case 1:
@@ -168,9 +184,8 @@ OTToMeme.expandEntry = function(tempword,category,attr) {
 	if (/^\s*\[[^\]]+\]/.test(tempword)) {
 		return tempword;
 	}
-	var words = tempword.split(/\s*\|\s*/);
-	// words = words.split(/\s*,\s*/);
-	var singular = this.returnSingular(words[0]);
+	var words = tempword.split(/\s*\|\s*/)
+	, singular = this.returnSingular(words[0]);
 	if (/^noun$|^noun_mass$/.test(category)) {
 		var plural = this.returnPlural(words,singular[1]);
 		// var plural = this.returnConj(words,singular[1],1);
@@ -219,14 +234,14 @@ OTToMeme.expandEntry = function(tempword,category,attr) {
 	}
 }
 OTToMeme.parseMemes = function(xhr){
-	var a = xhr.split('\n');
+	var a = xhr.split('\n')
+	, template, category;
 	for (var i = a.length-1; i >= 0; i--) {
 	/* remove comments and empty lines */
 		if (/^\s*#.*|^$/.test(a[i])) {
 			a.splice(i,1);
 		};
 	};
-	var template, category;
 	for (var i = 0, current, logtemplates = false, tname = "", attr, itag, al = a.length; i < al; i++) {
 	/* gather class and templates into arrays */
 		if (a[i].indexOf(':') == a[i].length-1) {
@@ -295,4 +310,5 @@ OTToMeme.parseMemes = function(xhr){
 	} else {
 		this.memes.templates = [].concat(this.memes.category["m_templates"]);
 	}
+	this.trackdip.length = this.memes.templates.length;
 }

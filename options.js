@@ -1,8 +1,8 @@
 OTToMeme.mod.options = true;
 OTToMeme.addOptions = function(){
-	var div = document.createElement('div');
-	var checkstr = ' checked="checked"';
-	var r = OTToMeme.GET.r; r = isNaN(r) ? 0 : r;
+	var div = document.createElement('div')
+	, checkstr = ' checked="checked"'
+	, r = OTToMeme.GET.r; r = isNaN(r) ? 0 : r;
 	OTToMeme.sh.parentNode.insertBefore(div, OTToMeme.sh);
 	div.outerHTML = '<div id="settings">'
 			+'<form id="options">'
@@ -20,6 +20,7 @@ OTToMeme.addOptions = function(){
 			OTToMeme.GET.u = true;
 			OTToMeme.memes.templates = [].concat(OTToMeme.memes.category["m_templates"]
 			,OTToMeme.memes.category["h_templates"]);
+			OTToMeme.trackdip.length = OTToMeme.memes.templates.length;
 		} else {
 			OTToMeme.GET.u = false;
 			OTToMeme.memes.templates = [].concat(OTToMeme.memes.category["m_templates"]);

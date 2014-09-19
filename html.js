@@ -59,11 +59,9 @@ OTToMeme.spoiler = function(e){
 	var self = e.target;
 	if (self.parentNode.parentNode.getElementsByTagName('div')[1].getElementsByTagName('div')[0].style.display != '') {
 		self.parentNode.parentNode.getElementsByTagName('div')[1].getElementsByTagName('div')[0].style.display = '';
-		self.innerText = '';
 		self.value = 'Hide';
 	} else {
 		self.parentNode.parentNode.getElementsByTagName('div')[1].getElementsByTagName('div')[0].style.display = 'none';
-		self.innerText = '';
 		self.value = 'Show';
 	};
 };

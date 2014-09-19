@@ -1,4 +1,6 @@
-<?php?>
+<?php
+$meme = "";
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -28,7 +30,7 @@
 			  degrees: 70, 74, 76, 78, 80, 83, 90
 			 -->
 		</svg>
-		<span id="memeloc"><span id="memetxt">WAIT FOR IT.<br/><br/>CHECKING FOR MUSTARD.</span></span>
+		<span id="memeloc"><span id="memetxt">WAIT FOR IT.<br/><br/>CHECKING FOR MUSTARD.<noscript><?=$meme?></noscript><!-- noscript will replace "WAIT FOR IT..." when php is ready --></span></span>
 		<!-- integrate http://mrob.com/time/automome/butan.php into "memetxt" through a php call. this is temporary until I can get a native OTToMeme perl or php implementation installed -->
 	</div>
 	<div id="sharing">
@@ -50,5 +52,30 @@
 <script type="text/javascript" src="options.js"></script>
 
 <script type="text/javascript">OTToMeme.run();</script>
+<!-- <canvas id="canvas" width="553" height="395"></canvas> -->
+<script type="text/javascript">
+// var canvas = document.getElementById('canvas');
+// var ctx    = canvas.getContext('2d');
+
+// var data   = '<svg xmlns="http://www.w3.org/2000/svg" width="553" height="395">' +
+//                '<foreignObject width="100%" height="100%">' +
+//                  document.getElementById('memeblock').outerHTML.replace(/<div/
+//                  	,'<div xmlns="http://www.w3.org/1999/xhtml"') +
+//                '</foreignObject>' +
+//              '</svg>';
+
+// var DOMURL = window.URL || window.webkitURL || window;
+
+// var img = new Image();
+// var svg = new Blob([data], {type: 'image/svg+xml;charset=utf-8'});
+// var url = DOMURL.createObjectURL(svg);
+
+// img.onload = function () {
+//   ctx.drawImage(img, 0, 0);
+//   DOMURL.revokeObjectURL(url);
+// }
+
+// img.src = url;
+</script>
 </body>
 </html>

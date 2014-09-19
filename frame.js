@@ -13,7 +13,7 @@ OTToMeme.chooseFrame = (function() {
 	};
 })()
 OTToMeme.setCap = function(history){
-	var cap;
+	var cap, fno;
 	if (!history) {
 		this.keepTrack(this.captrack,addmeme);
 		cap = this.cap = addmeme[this.chooseFrame(this.GET.f)];
@@ -24,7 +24,7 @@ OTToMeme.setCap = function(history){
 	}
 	if (this.mod.nav && this.mod.history) this.showNav();
 	// this.getImage(cap,history);
-	var fno = parseInt(cap[0],10);
+	fno = parseInt(cap[0],10);
 	if (this.mod.sharing) this.bb1(cap);
 	// this.tf.addEventListener('load',function(history){OTToMeme.delayShow(history)}(history));
 	this.tf.setAttribute('src',this.setURL(cap)+'.png');
@@ -41,9 +41,9 @@ OTToMeme.setCap = function(history){
 	return cap;
 }
 OTToMeme.getFrameOffset = function(frame,type){
-	var sp = (frame+"").split(/\b/);
-	var fint = +sp[0];
-	var cn = fint;
+	var sp = (frame+"").split(/\b/)
+	, fint = +sp[0]
+	, cn = fint;
 	if (type == 'g') {
 		if (fint > 255 && fint < 259) {
 			if (fint == 256) {
@@ -116,8 +116,8 @@ OTToMeme.getFrameOffset = function(frame,type){
 	return cn;
 }
 OTToMeme.getImage = function(xcap,xhistory){
-	var xhr = new XMLHttpRequest();
-	var cap = xcap, history = xhistory;
+	var xhr = new XMLHttpRequest()
+	, cap = xcap, history = xhistory;
 	xhr.open('GET',this.setURL(cap[0])+cap[1]+'.png',true);
 	xhr.onreadystatechange = function() {
 			if (xhr.readyState === 4) {
@@ -135,4 +135,22 @@ OTToMeme.getImage = function(xcap,xhistory){
 			};
 		};
 	xhr.send(null);
+}
+OTToMeme.setURL = function(fno){
+	/* returns the url (tat or time) and subfolder plus filename (minus .png) */
+	if (/^prickly/.test(fno[1])) return this.taturl + (this.online?'':'pricklymolp/') + fno[1] + fno[0];
+	if (/^POTM/.test(fno[1])) return this.taturl + (this.online?'':'potm/') + fno[1] + fno[0];
+	if (/^lucky/.test(fno[1])) return this.taturl + (this.online?'':'lucky/') + fno[1] + fno[0];
+	if (/^bean[y2]/.test(fno[1])) return this.taturl + (this.online?'':'beanies/') + fno[1] + fno[0];
+	if (/^t1i/.test(fno[1])) return this.taturl + (this.online?'':'t1i/') + fno[1] + fno[0];
+	return (fno[0] === 1 || fno[0] == "256a" || fno[0] == "257a" || fno[0] == "258a") ? "../timedragson/img/"+fno[1] : this.url+fno[1];
+		/* this check is for apocryphal frames and frame 1. none are available from xkcd */
+}
+OTToMeme.setTitle = function(frn){
+	/* like the above, a match is found to indicate the frame number and tat status for use with the alt tag */
+	if (/^prickly|^POTM|^lucky|^bean[y2]|^t1i/.test(frn)) {
+		return 'Time After "Time" ('+frn.match(/^prickly|^POTM|^lucky|^bean[y2]|^t1i/)[0]+')';
+	} else {
+		return '1190: "Time"';
+	}
 }

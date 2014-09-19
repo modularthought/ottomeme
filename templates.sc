@@ -17,37 +17,81 @@ regex ooh:
 \b(.)(.+?)({^'}?)({^'}?)(.+?)(.)\b/$1$2$3$3$4$4$4$5$6/g
 # -------------------- Templates (available for rotation) --------------------
 # @azule credit when not noted.
+# Template form syntax (using regex to notate) [name = regex (comment)\n [english]]:
+# comment		= /^				 #[a starting double # followed by all characters up to newline]
+# comment		= /^\s*#.*\n/		(include in file)
+				 #[excluding whitespace, a starting single # followed by all characters up to newline]
+# postprocess	= /``\w+$/		(execute templates on final draft meme)
+				 #[a double ` with :alpha: characters until end of line]
+# bold			= /\*[^*]*\*/g
+				 #[non-greedy matching pair of *]
+# italic		= /~[^~]*~/g
+				 #[non-greedy matching pair of ~]
+# underline		= /_[^_]*_/g
+				 #[non-greedy matching pair of _]
+# small-caps	= /=[^=]*=/g
+				 #[non-greedy matching pair of =]
+# template		= /^[^a-z[\]]*/g
+				 #[case sensitive (uppercase only) non-[] characters]
+# linebreak		= / {2}/g
+				 #[two spaces in a row]
+# super			= /\^[^^]/g
+				 #[single ^ followed by non ^ character]
+# sub			= /\`[^`]/g
+				 #[single ` followed by non ` character]
+# spoiler		= /#[^#]*#/g
+				 #[non-greedy matching pair of #]
+# preprocess	= /^\^|#(.*)#\$/	(exclude from final display)
+				 #[a starting ^# followed by any characters up to #$]
+# replacement	= /\[([^[]*)\]/g
+				 #[starting open [ including non-closing ] until closing ]]
+# literal		= /^[^a-z[\]]*/
+				 #[case sensitive (uppercase only) non-[] characters]
+# urlencoded	= /%([\dA-F]{2})/gi
+				 #[% followed by two hexadecimal characters]
+# history		= /^\$\d/
+# class			= /^(\w:)?([a-z][a-z\d_]*)/
+# /(-\w+)+/g
+# /--/
+# /\//g
+# alternatives	= literal,history,class
+# replacement = ($1 = ,)
+# template = (template | replacement)+
+# comment | preprocess? template postprocess?
+begin n_templates:
+template redundant:
+# "Redundant spoiler is redundant."
+# similar to xcatisx
+REDUNDANT [noun] IS REDUNDANT.
+template rnm:
+# Euphemism meme, constructed by @HES & @mrob27 # RNM = round number milestone
+[noun_character] IS [verb_tr-cont] [noun-article-singular, noun_place, noun_character]  =~...IF YOU KNOW WHAT I MEAN.~=
+end n_templates:
 begin m_templates:
 # ---------------------------- OTT specific memes ----------------------------
-template ott-js:
+template noticethex:
 DID ANYONE NOTICE THE [JAVASCRIPT@0.2, noun_definite, noun-singular]?
-template ott-redundancy:
+template redundancy:
 [REDUNDANCY IS@0.2, noun_mass--positive/$/ IS/, noun-plural--positive/$/ ARE/, REDUNDAKITTY IS@0.1] [MOLPISH@0.5, adjective--positive, MOLPFISH@0.1, MOLPHISH@0.1].
-template ott-redundant:
-# "Redundant spoiler is redundant."
-REDUNDANT [noun] IS REDUNDANT.
-template ott-darkening:
+template darkening:
 # is this related to '..and all I got was this lousy t-shirt' and by how much?
 *I [WAITED@0.8, verb_tr-past--positive] HALF [AN HOUR@0.1, noun_time-article-singular--duration] FOR ONE [DARKENING, verb_tr-cont@0.3] [PIXEL@0.5, noun-singular].*
-template ott-nini:
+template nini:
 # @Link. @mrob27 adjusted template
 NI NI [NI@0.33, NI NI@0.5, NI NI NI] [CHUPACABRA@0.2, noun-singular, noun_mass] [PING-PONG BALL@0.2, noun-singular, noun_mass].
 template ott-thus:
 [t:xkcd51, t:xkcd109-sub, t:xkcd208, t:xkcd414, t:xkcd550, t:xkcd859, t:xkcd1013, t:xkcd1017, t:xkcd1110a, t:xkcd1171, t:xkcd1190f1018, t:xkcd1278, t:xkcd1393, t:xkcd1401]  ...THUS ENDS [TIME, noun-plural/^/THE /].
-template ott-vhf:
-[adjective] [noun-singular, noun-plural, noun_mass, verb_tr-cont] IS [A HIDDEN TRACK ON@0.25, THE LATEST SINGLE OFF OF, THE NAME OF@0.01] THE [NEWEST, LATEST@0.3] [VHF, VITAL HOTDOG FUNCTION] ALBUM.
+template latestvhf:
+~[adjective] [noun-singular, noun-plural, noun_mass, verb_tr-cont]~ IS [A HIDDEN TRACK ON@0.25, THE LATEST SINGLE OFF OF, THE NAME OF@0.01] THE [NEWEST, LATEST@0.3] [VHF, VITAL HOTDOG FUNCTION] ALBUM.
 template ott-true:
-^#[noun-singular, noun_mass, noun_time-singular--duration, noun_definite, noun_character/<nodef>][$0/$|­/ /g][$1/%3C|%3E|{<>}//g]#$OT[$2/<acronym>]:  One True [$0].
-template ott-rnm:
-# Euphemism meme, constructed by @HES & @mrob27 # RNM = round number milestone
-[noun_character] IS [verb_tr-cont] [noun-article-singular, noun_place, noun_character]  =~...IF YOU KNOW WHAT I MEAN.~=
+^#[noun-singular, noun_mass, noun_time-singular--duration, noun_definite, noun_character/<nodef>][$0/$|­/ /g][$1/%3C|%3E|{<>}//g]#$OT[$2/<acronym>]:  ONE TRUE [$0].
 template ott-metaphor:
 # By @Link, a running joke about the OTC originating with early theories explaining xkcd 1190 "Time"
 MAYBE [noun_character] [IS PREGNANT@0.2, HAS CANCER@0.25, HAD AN ABORTION@0.33, GOT MARRIED@0.5, GOT DIVORCED]!  MAYBE [THE OTC@0.2, noun-article-singular, noun_mass, noun_place] IS A METAPHOR FOR [THIS@0.1, THAT@0.1, noun-plural, noun_mass]!
 template ott-meme:
 # @azule, OTT:2062:19#p3636039, added by @mrob27; @azule removed 'SENTENCE' and changed chance of "WELL,".
 [WELL%2C @0.5,]ANYTHING *COULD* BE [A MEME@0.2, noun-article-singular], INCLUDING THIS [noun-singular] I JUST [verb_tr-past].
-template ott-speech:
+template glr-speech:
 # GLR Hugo speech by @Link
 [noun, GAZEBO@0.33]. [noun_mass, OINTMENT@0.33]. [noun, HARPSICHORD@0.33]. [noun, CREDENZA@0.33]. [noun, noun_place/<nodef>, BUNGALOW@0.33)].
 # ----------------------------- xkcd origin memes -----------------------------
@@ -65,10 +109,10 @@ template xkcd54:
 *[noun_definite/<defize>, noun_mass, verb_intr-cont, noun-singular--mineral]*. IT WORKS, CH*RPIES.
 template xkcd109:
 *SPOILER ALERT­!*  [t:xkcd109-sub]
-*[CHIRP, verb_tr-inf--negative/ /. /g]. THAT. [MUSTARD, noun-singular--negative/ /. /g].*
 template xkcd137:
 # @Link chose the base words: CHIRP. THAT. MUSTARD. (which could be construed to be based on CHIRPING MUSTARD.)
-[t:ott-darkening, t:ott-metaphor, t:xkcd11, t:xkcd51, t:xkcd180, t:xkcd821c2, t:xkcd859]  THIS IS VERY IMPORTANT, SO I WANT TO SAY IT AS CLEARLY AS I CAN:  *[CHIRP, verb_tr-inf--negative/ /. /g]. THAT. [MUSTARD, noun-singular--negative/ /. /g].*
+*[CHIRP, verb_tr-inf--negative/ /. /g]. THAT. [MUSTARD, noun-singular--negative/ /. /g].*
+[t:darkening, t:ott-metaphor, t:xkcd11, t:xkcd51, t:xkcd180, t:xkcd821c2, t:xkcd859]  THIS IS VERY IMPORTANT, SO I WANT TO SAY IT AS CLEARLY AS I CAN:  *[CHIRP, verb_tr-inf--negative/ /. /g]. THAT. [MUSTARD, noun-singular--negative/ /. /g].*
 template xkcd149:
 [SUDO, MOLPY@0.1] MAKE ME [noun-article-singular].
 template xkcd178:
@@ -78,7 +122,9 @@ IF YOU [DIE@0.3, verb_intr-inf] IN [noun_place], YOU [$0] IN _REAL_ _LIFE_!
 template xkcd194:
 [noun-plural]: THEY ARE ABOUT ~THIS~ [BIG@0.25, SEAISH@0.33, adjective--positive].  NOW CAN WE _PLEASE_, AS [A CULTURE, THE OTT, A THREAD, A NEEDLE-PULLED THING@0.2], MOVE ON?
 template xkcd208:
-EVERYMOLPY, STAND BACK. I KNOW [verb_intr-cont].
+EVERYMOLPY, STAND BACK.  I KNOW [verb_intr-cont].
+# @azule format. from the t-shirt, linked by @ED
+/EVERYMOLPY, STAND BACK/  I KNOW [verb_intr-cont].
 template xkcd231:
 YOU'RE [noun-article-singular, noun_character--single]!
 template xkcd285:
@@ -104,7 +150,7 @@ template xkcd481:
 template xkcd528:
 WELL, IT'S MOLPIER THAN [noun-plural--negative, noun_mass--negative].
 template xkcd550:
-SUP [noun_character/<nodef>], I HERD U DIDN'T LIEK [verb_intr-cont--negative], BUT I ACCIDENTALLY IN YOUR [noun-singular].``dawgify
+SUP [DAWG@0.1, noun_character/<nodef>], I HERD U DIDN'T LIEK [verb_intr-cont--negative], BUT I ACCIDENTALLY IN YOUR [noun-singular].``dawgify
 template xkcd595:
 I DON'T THINK [verb_tr-cont--negative] [noun-article-singular] COUNTS AS SEXY.
 template xkcd598:
@@ -140,7 +186,7 @@ template xkcd1017:
 I'VE TRIED TO MAKE AN EXTREME SPORT OUT OF... ~[verb_intr-cont]~.
 template xkcd1025:
 [noun-singular--animal] [verb_tr-cont] [DUNGEON@0.3, noun_definite]  ... DOT CHIRPING MUSTARD DOT COM.
-[t:ott-speech, t:xkcd936-sub]  ... DOT CHIRPING MUSTARD DOT COM.
+[t:glr-speech, t:xkcd936-sub]  ... DOT CHIRPING MUSTARD DOT COM.
 template xkcd1046:
 "[noun-singular, adjective, noun_mass, noun_place/<nodef>, verb_intr-cont]" TOTALLY JUST STOPPED SEEMING LIKE A REAL WORD.``unrealify
 template xkcd1037-life-in-lab:
@@ -152,14 +198,14 @@ YOU ~MANIACS­!~  THAT [HUGO AWARD@0.1, verb_intr-cont/$/ TROPHY/, noun-singular
 template xkcd1134:
 ^#[noun-article-singular--animal]#$LEAVE [$0/^AN? /THE /].  WHY DID YOU HAVE [$0]?
 template xkcd1131:
-TO THE SURPRISE OF [noun_character], [NUMBERS CONTINUE, noun-plural/$/ CONTINUE/, noun_mass/$/ CONTINUES/] TO BE BEST SYSTEM FOR DETERMING WHICH OF TWO THINGS IS [LARGER, adjective-compar, noun-compar].
+TO THE SURPRISE OF [noun_character], [NUMBERS CONTINUE, noun-plural/$/ CONTINUE/, noun_mass/$/ CONTINUES/] TO BE BEST SYSTEM FOR DETERMINING WHICH OF TWO THINGS IS [LARGER, adjective-compar, noun-compar].
 template xkcd1171:
 I GOT 99 [PROBLEMS@0.8, noun-plural--animal], SO I USED [noun-plural]. NOW I HAVE 100 [$0].
 #1190 (by frame)
 template xkcd1190:
 #the title text
 "[t:xkcd1190-sub]" IS [noun_time--period, THIS NEWPIX]'S COMMANDMENT.
-%[t:xkcd1190-sub, t:ott-redundant]%``spoiler
+^%[t:xkcd1190-sub, t:redundant]%$``spoiler
 template xkcd1190f408:
 I DON'T UNDERSTAND WHAT THE [noun-singular] IS DOING.
 template xkcd1190f563:
@@ -203,13 +249,13 @@ WILL [TEENS, noun_character--otc-couple, noun_character--otc-group] USE [noun_ch
 template xkcd1317:
 I FEEL "PARALYZED" BY [OVERWHELMING EXISTENTIAL DREAD, THE SADNESS, T** **D].  ...AND YET FOR SOME REASON I'M ~*REALLY*~ EXCITED ABOUT [verb_intr-cont, noun-plural, verb_tr-cont, noun_mass, noun_definite/<defize>]?
 template xkcd1318:
-*ACTUALLY,* [t:ott-redundancy, t:ott-nini, t:ott-rnm, t:xkcd37, t:xkcd178, t:xkcd378, t:xkcd1190f563]
+*ACTUALLY,* [t:redundancy, t:nini, t:rnm, t:xkcd37, t:xkcd178, t:xkcd378, t:xkcd1190f563]
 template xkcd1340:
-WHOA, IT'S [FRAME , =NP=, NEWPIX ]%%!  UNDER [GLR, GREAT LORD RANDALL, MSCHA, GEEKWAGON, AUBRONWOOD]'S SYSTEM, THAT [$0/ //] WILL ~NEVER BE LOGGED AGAIN!!~``np
+WHOA, IT'S [FRAME , =NP=, NEWPIX ]^%%$!  UNDER [GLR, GREAT LORD RANDALL, MSCHA, GEEKWAGON, AUBRONWOOD]'S SYSTEM, THAT [$0/ //] WILL ~NEVER BE [LOGGED, ONGED] AGAIN!!~``np
 template xkcd1393:
 ^#[noun-singular, noun_place, noun_time--period, noun_mass, noun_time-singular--duration, noun_definite/<defize>][$0/\bTHE\b/Þ/g][$1/<ooh-vowel>]#$...=oo=OO=ooo=O=o=...  [$2/Þ/THE/g] IS [verb_intr-cont/<ooh-consonant>]!``ooh
 template xkcd1401:
-THE NICE THING ABOUT HEAD%[noun-plural--animal, TREBUCHETS@0.2, TREBUCHATS@0.2]% IS THAT IT'S REALLY EASY TO GET [OTHER PEOPLE, OTTERS] TO BELIEVE IN THEM.``incrc
+THE NICE THING ABOUT HEAD^%[noun-plural--animal, TREBUCHETS@0.2, TREBUCHATS@0.2]%$ IS THAT IT'S REALLY EASY TO GET [OTHER PEOPLE, OTTERS] TO BELIEVE IN THEM.``incrc
 end m_templates:
 # ----------- Subtemplates (only accessible through template calls) -----------
 template xkcd378-sub1:

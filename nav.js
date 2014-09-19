@@ -46,12 +46,12 @@ OTToMeme.replaceURL = function() {
 		+location.hash);
 }
 OTToMeme.clickToEnd = function() {
-	var i = history.length;
+	var go = history.length;
 	/* could not figure out another way to skip to end
 	   as a too high number does nothing
 	   and a too low number doesn't go to the end. */
-	while (i > 0) {
-		history.go(i--);
+	while (go > 0) {
+		history.go(go--);
 	}
 }
 /* arrows */

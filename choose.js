@@ -12,8 +12,8 @@ OTToMeme.populateSandR = function(regex,snowindex){
 }
 OTToMeme.setLiterals = function(snowballindex,snowball){
   /* convert literals and percentages and add to literal class */
-	var rem = []; /* keep track of @percent's to remove */
-	var f, at, add;
+	var rem = [] /* keep track of @percent's to remove */
+	, f, at, add;
 
 	this.memes.class['literal'+snowballindex] = [];
 	for (var i = 0, snow = snowball, slen = snowball.length; i < slen; i++) {
@@ -82,8 +82,8 @@ OTToMeme.conjugate = function(obj,conj,snow){
 			conj.push('inf');
 		}
 	}
-	var str = [], i, lconj = conj;
-	var olf = this.findRandom(obj.syn);
+	var str = [], i, lconj = conj
+	, olf = this.findRandom(obj.syn);
 	if ((i = lconj.indexOf('article')) > -1) {
 		str.push(obj[lconj[i]][olf]);
 		lconj = lconj.join(',').replace(/article,?/,'').split(',');
@@ -97,20 +97,20 @@ OTToMeme.convertToLiteral = function(rephrase,snowball){
 	var snowindex = this.findRandom(snowball.length)
 	, attr = snowball[snowindex].split('--')
 	, snow = attr[0].split('-')
-	, flake, regsnow = this.regularSnow;
+	, flake, regsnow = this.regularSnow
+	, conj = snow.slice(1)
+	, ttag = true
+	, snowflake = '';
 	attr = attr[1] ? attr[1].split('-') : null;
-	var ttag = true;
-	var conj = snow.slice(1);
 	snow = snow[0];
-	var snowflake = '';
 
 	var snowballl = snowball.join(',').replace(/literal\d+,?/g,'').replace(/,$/,'');
 	if (/^\$\d/.test(rephrase)) {
 		snowflake = this.snowflakes[rephrase.match(/^\$(\d)/)[1]];
 	} else if (/^t:/.test(snowballl)) {
-		var fln = this.findRandom(snowball.length);
-		var snowf = snowball[fln];
-		var snowflake = this.buildSnowman(this.memes.template[snowf.substr(2)]);
+		var fln = this.findRandom(snowball.length)
+		, snowf = snowball[fln];
+		snowflake = this.buildSnowman(this.memes.template[snowf.substr(2)]);
 	} else {
 		do {
 			var fln = this.findRandom(this.memes.class[snow].length);
@@ -167,13 +167,13 @@ OTToMeme.buildSnowman = function(tsnowman, sr, frame){
 	tsnowman = tsnowman[this.findRandom(tsnowman.length)];
 	var snowballs = tsnowman.match(/\[[^\]]+\]/g);
 	this.snowflakes = [];
-	for (var s = 0, slen = snowballs.length; s < slen; s++) {
+	for (var s = 0, slen = snowballs.length, snowball, snowflake; s < slen; s++) {
 		this.regularSnow = []; /* flush regsnow obj on each bracket (snowball) iteration */
-		var snowball = rephrase = snowballs[s].substr(1,snowballs[s].length-2);
+		snowball = rephrase = snowballs[s].substr(1,snowballs[s].length-2);
 			/* save without surrounding brackets */
 		snowball = snowball.split(/, ?/);
 		snowball = this.setLiterals(s,snowball);
-		var snowflake = this.convertToLiteral(rephrase,snowball);
+		snowflake = this.convertToLiteral(rephrase,snowball);
 		tsnowman = tsnowman.replace(reBracket, snowflake);
 	};
 	tsnowman = tsnowman
@@ -190,14 +190,17 @@ OTToMeme.buildSnowman = function(tsnowman, sr, frame){
 				.split('``'); /* splits post-template function into array */
 	tsnowman = tsnowman[1] ? this.postProcess(tsnowman, frame) : tsnowman[0];
 	var dm = (new Date).getMinutes().toString();
-	if (dm == 0 || dm == 1 || dm == 30 || dm == 31) {
+	if (this.trackdip.dip != (new Date()).getDate() && !this.trackdip.posted && (OTToMeme.trackdip.lefth == 0 || !this.findRandom(OTToMeme.trackdip.lefth--))) {
+		return this.process.dip();
+	} else if (dm == 0 || dm == 1 || dm == 30 || dm == 31) {
 		/* special ONG function */
-		var ongre = /([^AEIOU]|\b)\*?[AOU](?:[NM]?G|[NM]G?)\*?([^EDC]|\b)/;
-		if (ongre.test(tsnowman) || !sr--) {
-			return tsnowman.replace(ongre,'$1*'+(dm==0||dm==30?'O':'U')+'NG*$2');
-		} else {
-			return this.buildSnowman(this.chooseMeme());
-		}
+		return this.process.ong(tsnowman, sr, dm);
+		// var ongre = /([^AEIOU]|\b)\*?[AOU](?:[NM]?G|[NM]G?)\*?([^EDC]|\b)/;
+		// if (ongre.test(tsnowman) || !sr--) {
+		// 	return tsnowman.replace(ongre,'$1*'+(dm==0||dm==30?'O':'U')+'NG*$2');
+		// } else {
+		// 	return this.buildSnowman(this.chooseMeme());
+		// }
 	} else {
 		return tsnowman;
 	}
@@ -212,10 +215,9 @@ OTToMeme.setSnowMeme = function(hstory, frame){
 		try {
 			ssnowman = this.buildSnowman(this.chooseMeme(), 27, frame);
 			this.GET.e = false;
+			console.log(ssnowman)
 		} catch(e){
-			ssnowman = "I'M SORRY.  YOUR MEME COULD NOT BE FOUND.  TRY MAKING ANOTHER SANDCASTLE."; /* maybe set this to select from meme e404 (although only having this available on errors would make it too rare). maybe like: "[t:e404]  TRY MAKING ANOTHER SANDCASTLE." to make it clear that this is not just a meme but an error. */
-			/* also errors could pop up an error log icon to inform user what the error is so they can post it or send it to me */
-			/* actually, making it say the error, such as "MEME #7200 COULD NOT BE FOUND..." is directly useable to be sent to me. "MEME TEMPLATE XKCD377 NOT FOUND..." etc. */
+			ssnowman = "I'M SORRY.  YOUR MEME, _"+this.templatetrack.name.toUpperCase()+"_, COULD NOT BE FOUND.  TRY MAKING ANOTHER SANDCASTLE."; /* maybe set this to select from meme e404 (although only having this available on errors would make it too rare). maybe like: "[t:e404]  TRY MAKING ANOTHER SANDCASTLE." to make it clear that this is not just a meme but an error. */
 			this.GET.r = 0;
 			this.GET.e = true;
 			console.log(this.templatetrack)
@@ -270,7 +272,15 @@ OTToMeme.postProcess = function(meme, frame) {
 	}
 }
 OTToMeme.process = {
-	pcre: /%([^%]*)%/gi
+	pcre: /\^%(.*?)%\$/gi
+	, ong: function(tsnowman, sr, dm) {
+		var ongre = /([^AEIOU]|\b)\*?[AOU](?:[NM]?G|[NM]G?)\*?([^EDC]|\b)/;
+		if (ongre.test(tsnowman) || !sr--) {
+			return tsnowman.replace(ongre,'$1*'+(dm==0||dm==30?'O':'U')+'NG*$2');
+		} else {
+			return this.buildSnowman(this.chooseMeme());
+		}
+	}
 	, softBreak: function(meme) {
 	 	// needs fixed for &amp; escapes as well.
 		return meme.replace(/%2A/g,'*').replace(/\B/g,'\u200b').replace(/\*/g,'%2A');
@@ -287,17 +297,17 @@ OTToMeme.process = {
 				}
 				switch (i++) {
 					case 0: return p1.replace(/([AEIOU])([^AEIOU])([^AEIOU]*)([AEIOU])/,'$1$2'+twos+'$3$4');
-					default: return match;
+					default: return p1;
 				}
 			}
 		}();
 		return meme.replace(this.pcre,pc);
 	}
 	, unrealify: function(meme){
-		var suffix = ['','SOME','FUL','NESS','ITUDE','ED','ISH','MOLP'];
-		var prefix = ['','','','','','','','','','','','RAPTOR']
-		var as = OTToMeme.findRandom(suffix.length);
-		var ap = OTToMeme.findRandom(prefix.length);
+		var suffix = ['','SOME','FUL','NESS','ITUDE','ED','ISH','MOLP']
+		, prefix = ['','','','','','','','','','','','RAPTOR']
+		, as = OTToMeme.findRandom(suffix.length)
+		, ap = OTToMeme.findRandom(prefix.length);
 		return meme.replace(/"([^"]+)"/,'"'+prefix[ap]+'$1'+suffix[as]+'"').replace(/([^AEIOU])EED/g,'$1ED');
 	}
 	, dawgify: function(meme){
@@ -329,7 +339,6 @@ OTToMeme.process = {
 	, ooh: function(meme) {
 		var ooh = meme.split('  ')[0], is = meme.split('  ')[1]
 		, modulo = [3,5];
-		// var tis = is;
 		for (var i = 0, sf = 0, tis = ''; i < is.length; i++) {
 			if (/%[23][ACE267]/.test(is.substr(i,3))) {
 				tis += is.substr(i,3);
@@ -372,7 +381,7 @@ OTToMeme.process = {
 		if (/^prickly|^POTM|^lucky|^bean[y2]|^t1i/.test(frame[1])) {
 			meme = meme.replace(/GEEKWAGON|AUBRONWOOD|GLR|GREAT LORD RANDALL/,'MSCHA');
 			// change GLR|GREAT LORD RANDALL to WAVENEY|TMAN2ND|SILENTTIMER|?
-			// and: res = /LOGGED/; rer = 'CREATED';
+			// and: res = /LOGGED|ONGED/; rer = 'CREATED';
 		}
 		switch (true && OTToMeme.mod.frame) {
 			case (/GEEKWAGON/.test(meme)):
@@ -385,7 +394,7 @@ OTToMeme.process = {
 			case (/GLR/.test(meme)):
 			case (/GREAT LORD RANDALL/.test(meme)):
 				fr = (frame[1]+"").replace(/\B/g,'\u00ad');
-				res = /LOGGED/; rer = 'CREATED';
+				res = /LOGGED|ONGED/; rer = 'CREATED';
 				break;
 			case (/MSCHA/.test(meme)):
 			default:
@@ -402,12 +411,165 @@ OTToMeme.process = {
 		}();
 		return meme.replace(this.pcre,pc).replace(res,rer);
 	}
+	, dip: function(){
+		var numberWordEnd = function(number,suffix){
+			if (!suffix) return number;
+			switch (+(number + "").substring(-1)){
+				case 1:
+					/* unexpected behavior allows false if to goto default while skipping intermediate cases */
+					if (+(number + "").substring(-2) != 11) return number+"ST";
+				case 2:
+					if (+(number + "").substring(-2) != 12) return number+"ND";
+				case 3:
+					if (+(number + "").substring(-2) != 13) return number+"RD";
+				case 0:
+				default: return number+"TH";
+			}
+			// return number+"TH";
+				/* to avoid unexpected behavior, just return after switch for "default" */
+		}
+		, offsetDate = function(m,d,y,l){
+			var leap = ((new Date(y,1,29)).getDate() == 29);
+			if (m == 2 && d >= 25) {
+				return (l=="m") ? 0 : d - 24;
+			} else if (m == 3 && d <= 21) {
+				return (l=="m") ? 0 : d + 7;
+			} else if (m == 3 && d >= 22) {
+				return (l=="m") ? 1 : d - 21;
+			} else if (m == 4 && d <= 19) {
+				return (l=="m") ? 1 : d + 9;
+			} else if (m == 4 && d >= 20) {
+				return (l=="m") ? 2 : d - 19;
+			} else if (m == 5 && d <= 16) {
+				return (l=="m") ? 2 : d + 12;
+			} else if (m == 5 && d >= 17) {
+				return (l=="m") ? 3 : d - 16;
+			} else if (m == 6 && d <= 14) {
+				return (l=="m") ? 3 : d + 14;
+			} else if (m == 6 && d >= 15) {
+				return (l=="m") ? 4 : d - 14;
+			} else if (m == 7 && d <= 11) {
+				return (l=="m") ? 4 : d + 17;
+			} else if (m == 7 && d >= 12) {
+				return (l=="m") ? 5 : d - 11;
+			} else if (m == 8 && d <= 8) {
+				return (l=="m") ? 5 : d + 20;
+			} else if (m == 8 && d >= 9) {
+				return (l=="m") ? 6 : d - 8;
+			} else if (m == 9 && d <= 6) {
+				return (l=="m") ? 6 : d + 22;
+			} else if (m == 9 && d >= 7) {
+				return (l=="m") ? 7 : d - 6;
+			} else if (m == 10 && d <= 3) {
+				return (l=="m") ? 7 : d + 25;
+			} else if (m == 10 && d >= 4) {
+				return (l=="m") ? 8 : d - 3;
+			} else if (m == 11 && d <= 1) {
+				return (l=="m") ? 8 : d + 27;
+			} else if (m == 11 && d >= 2) {
+				return (l=="m") ? 9 : d - 1;
+			} else if (m == 11 && d <= 29) {
+				return (l=="m") ? 9 : d + 29;
+			} else if (m == 11 && d >= 31) {
+				return (l=="m") ? 10 : d - 30;
+			} else if (m == 0 && d <= 26) {
+				return (l=="m") ? 10 : d + 2;
+			} else if (m == 0 && d >= 27) {
+				return (l=="m") ? 11 : d - 26;
+			} else if (m == 1 && d <= 23) {
+				return (l=="m") ? 11 : d + 5;
+			} else if (m == 1 && d >= 24) {
+				return (l=="m") ? 12 : d - 23;
+			} else if (m == 2 && d <= (leap ? 22 : 23)) {
+				return (l=="m") ? 12 : d + 5;
+			} else if (m == 2 && leap && d == 23) {
+				return (l=="m") ? 13 : 1;
+			} else if (m == 2 && d == 24) {
+				return (l=="m") ? 13 : leap ? 2 : 1;
+			}
+		}
+		, convert = {
+			yip: function(y,m,d,s,word) {
+				var os = (m <= 3 && convert.mip(dm,dd,dy) >= 10);
+					/* this needs fixed, with probably an inclusion in offsetDate */
+				var year = y - 2013 + (os ? -1 : 0);
+				var when = word ? "AFTER" : "A";
+				if (year == 0) {
+					if (word) {
+						return "YIP OF";
+					} else {
+						return "Y";
+					}
+				}
+				if ((year + "").indexOf('-')==0){
+					year = Math.abs(year);
+					when = "BEFORE";
+					if (!word) when = "B";
+				}
+				return numberWordEnd(year,s)+(word?" YIP ":"")+when;
+			}
+			, mip: function(m,d,y) {
+				return offsetDate(m,d,y,"m");
+			}
+			, wip: function(w) {
+				return w;
+			}
+			, dip: function(d,m,y,s) {
+				return offsetDate(m,d,y,"d");
+			}
+		}
+		, d = new Date()
+		, dy = d.getFullYear()
+		, dm = d.getMonth()
+		, dw = d.getDay()
+		, dd = d.getDate()
+		, wip = ["SEADIX", "RANDIX", "WHIFDIX", "CUEGANDIX", "ONGLESSDIX", "=DAVEAN=DIX", "RIVERDIX"]
+		, mip = ["INNOCENCE", "DEPARTURE", "AWE", "TRIBULATION", "REVELATION", "DELIVERANCE", "COMMANDMENT", "VOYAGE", "VISITATION JA", "MYSTERY", "SUMMIT", "COMMUNITY", "ADVENT", "SYZYGY"]
+		, osystem = ["OUR SYSTEM", "UCIM'S SYSTEM", "THE ECCLESIASTICAL CALENDAR"];
+		OTToMeme.trackdip.dip = (new Date()).getDate();
+		OTToMeme.trackdip.posted = true;
+		// var startDate = new Date()
+		// , endDate = new Date(startDate.getFullYear(),startDate.getMonth(),startDate.getDate(),23,59,59);
+		// setTimeout(function(){
+		// 	OTToMeme.trackdip.posted = false;
+		// }, endDate - startDate);
+		return "WHOA, IT'S "+wip[convert.wip(dw)]+",  THE "+numberWordEnd(convert.dip(dd,dm,dy,true),true)+" DIP OF "+mip[convert.mip(dm,dd,dy)]+" IN THE "+convert.yip(dy,dm,dd,true,true)+" TIME.  UNDER "+osystem[OTToMeme.findRandom(3)]+", THAT DATE WILL ~NEVER HAPPEN AGAIN!!~";
+	}
 	, spoiler: function(meme){
 		var pc = function(){
 			var i = 0;
 			return function (match,p1,index){
 				switch (i++) {
 					case 0: return '#'+p1+'#';
+					default: return p1;
+				}
+			}
+		}();
+		return meme.replace(this.pcre,pc);
+	}
+	, regex: function(meme){
+		var pc = function(){
+			var i = 0;
+			return function (match,p1,index){
+				switch (i++) {
+					/* I KNOW KETCHUPPING. */
+					/* \w \w{4} \w{11}\. */
+					/* (I)( )(K)(N)OW\2\3ETCHUP{2}\1\4G\. */
+					/* I KNOW REGULAR EXPRESSIONS */
+					/* (I)( )K(N)(O)W\1(R)(E)GULA\2\1\3XP\2\3S{2}IONS */
+					// case 0: return p1.replace(/((\w+)|(\d+)|(-+)|( +))+/g,'$1');
+					default: return p1;
+				}
+			}
+		}();
+		return meme.replace(this.pcre,pc);
+	}
+	, spokenregex: function(meme){
+		var pc = function(){
+			var i = 0;
+			return function (match,p1,index){
+				switch (i++) {
+					case 0: return p1.replace(/E/g,'3').replace(/T/g,'7').replace(/A/g,'4').replace(/L/g,'|').replace(/O/g,'0').replace(/I/g,'1').replace(/3/g,'THREE').replace(/7/g,'SEVEN').replace(/4/g,'FOUR').replace(/\|/g,'BAR').replace(/0/g,'ZERO').replace(/1/g,'ONE');
 					default: return p1;
 				}
 			}

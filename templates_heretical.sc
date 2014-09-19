@@ -16,6 +16,9 @@ template growontrees:
 # @azule.
 # MONEY DON'T GROW ON TREES.
 [nouns] DON'T [GROW, verb_intr-inf@0.3] ON [TREES, BAOBABS].
+template noxharmed:
+# @azule. American Human Association declaration at the end of movies that featured animals.
+NO [MOLPIES@0.1, noun-plural--animal] WERE [HARMED, verb_tr-past--negative@0.3] IN THE MAKING OF [noun_definite/<defize>, noun_mass, THIS MEME].
 # ---------- @mrob27 and @Link and the original Automeme's additions ----------
 template e404:
 ^#[404-NOT FOUND@0.33, 408-REQUEST TIMEOUT@0.5, 503-UNAVAILABLE]#$[$0/-.*$//] - [noun, noun_character] [$0/^.*-//]
@@ -55,7 +58,7 @@ template dialx:
 template xharder:
 [verbs-inf] HARD 2: ~[$0] HARDER~
 template hatebeautiful:
-DON'T [HATE@0.3, verb_tr-inf] ME BECAUSE I'M [FLUTTERBEEWINGISH@0.2, WINGISH@0.25, adjective].
+DON'T [HATE@0.4, verb_tr-inf--negative] ME BECAUSE I'M [FLUTTERBEEWINGISH@0.1, WINGISH@0.15, adjective--positive].
 template thinkofthex:
 EVERY TIME YOU [MAKE A PUN@0.2, verb_intr-inf], [RANDALL@0.3, THE GLR@0.4, noun_character] [verb_tr-present] [noun-article--animal].  PLEASE, THINK OF THE [$3/^AN? //].
 template momenttotalk:
@@ -123,6 +126,9 @@ template insoviet:
 ^#[RUSSIA, noun_place][$0/^/SOVIET /]#$IN [$1/SOVIET THE/THE SOVIET/], [noun-singular, noun_mass, noun_character] [verb_tr-present] *YOU*.
 template instantx:
 INSTANT [noun-singular, noun-plural, noun_mass],  JUST ADD [noun-plural, noun_mass].
+template rejectreality:
+# @Link.
+I REJECT YOUR [noun, noun-plural, noun_definite] AND SUBSTITUTE MY OWN.
 template whatyoudidthere:
 I SEE WHAT [YOU@0.5, noun_character] [verb_tr-past] THERE
 template xtiemnao:
@@ -138,6 +144,10 @@ IT'S [noun-plural, noun_mass] ALL THE WAY DOWN.
 template thinktherefoream:
 I [verb_intr-inf], THEREFORE I [verb_intr-inf, AM@0.1].
 I [THINK@0.5, verb_intr-inf], THEREFORE I [verb_intr-inf].
+template lousyshirt:
+# @azule added based on @Link's.
+# integrated @Link's actual template into my adjective full version.
+[I@0.2, noun_character--single] [t:lousyshirt-sub1, t:lousyshirt-sub2] AND ALL I GOT WAS THIS [LOUSY@0.3, adjective--negative] [T-SHIRT@0.3, HAT@0.3, noun--negative-mineral, noun_definite]!
 template jarofx:
 I'VE GOT A JAR OF [noun-plural, noun_mass, noun_mass]! I'VE GOT A JAR OF [$0]!  AND GUESS WHAT'S INSIDE IT!
 template getinthecar:
@@ -247,7 +257,7 @@ THIS IS [adjective-article] [noun-singular].  IT IS MADE OF [noun-plural, noun_m
 template imustxit:
 THIS IS [adjective] [noun-singular], I MUST [verb_tr-inf] IT.
 template shopped:
-THIS [LOOKS@0.5, IS] [PHOTOSHOPPED@0.2, SHOOPED@0.1, OTTIFIED@0.25, OTCOLORISED@0.33, adjective, verb_tr-perfect].  I CAN TELL BY THE [noun-singular, noun-plural, noun_mass] AND FROM HAVING SEEN A LOT OF [noun-plural, noun_mass] IN MY DIP.
+THIS [LOOKS@0.5, IS] [PHOTOSHOPPED@0.2, OTTIFIED@0.25, OTCOLORISED@0.33, adjective, verb_tr-perfect].  I CAN TELL BY THE [noun-singular, noun-plural, noun_mass] AND FROM HAVING SEEN A LOT OF [noun-plural, noun_mass] IN MY DIP.
 template brainonx:
 THIS IS YOUR [BRAIN@0.35, noun-singular].  ~AND THIS IS YOUR [$0] ON [noun-plural, noun_mass].~  _ANY QUESTIONS_?
 template threadjack:
@@ -320,6 +330,10 @@ template nicethings:
 ^#[noun_character, noun_mass/<defize>, noun-article-singular]#$[$0/^THE /THIS /] IS WHY WE CAN'T HAVE [MOLPISH@0.2, NICE@0.25, adjective] THINGS.
 end h_templates:
 # ----------- Subtemplates (only accessible through template calls) -----------
+template lousyshirt-sub1:
+WENT TO [noun_place]
+template lousyshirt-sub2:
+[verb_tr-past--positive] THE [noun-plural]
 template consider1:
 CONSIDER THE [noun-plural]
 template consider1a:

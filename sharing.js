@@ -10,14 +10,36 @@ OTToMeme.bb2 = function(history) {
 	if (!history) {
 		// this.memes.meme[this.memes.meme.length-1][1] = this.snowmeme;
 	} else {
-		snowmeme = history[1];
+		var snowmeme = history[1];
 	}
+	var addAcc = function(a,b){
+		return (a*1000+b*1000)/1000;
+	}
+	, minusAcc = function(a,b){
+		return (a*1000-b*1000)/1000;
+	};
 	/* start of ooh */
 	/* needs figured out for bbcode */
-	for (var i = 0, snowtemp = snowmeme, off = 0, sd = 1, reooh = /([\^`])(.)/; i < snowtemp.length && /\^|`/.test(snowtemp); i++) {
+	for (var i = 0, snowtemp = snowmeme, off = 0, up = 0, down = 0, neither = false, sd = 1, reooh = /([\^`])(.)/; i < snowtemp.length && /\^|`/.test(snowtemp); i++) {
 		if (snowtemp.match(reooh)[1] == '^') {
-			snowtemp = snowtemp.replace(reooh, '[sup]$2[/sup]');
+			// off=addAcc(off,0.085*sd);
+			down = (down == 3 ? 0 : ++down);
+			console.log(down)
 		} else if (snowtemp.match(reooh)[1] == '`') {
+			// off=minusAcc(off,0.085*sd);
+			up = (up == 3 ? 0 : ++up);
+			console.log(up)
+		}
+		// if (Math.abs(off*100) > 55) {
+		// 	sd *= -1;
+		// }
+		if ((down == 3 && up > 0) || (up == 3 && down > 0)) {
+			up = down = 0;
+		}
+		console.log("up:"+up+";down:"+down)
+		if (up > down) {
+			snowtemp = snowtemp.replace(reooh, '[sup]$2[/sup]');
+		} else if (down > up) {
 			snowtemp = snowtemp.replace(reooh, '[sub]$2[/sub]');
 		} else {
 			snowtemp = snowtemp.replace(reooh, '$2');
@@ -25,21 +47,11 @@ OTToMeme.bb2 = function(history) {
 	};
 	snowmeme = snowtemp;
 	/* end of ooh */
-	// var reoohfloat = /<span class="oohfloat" style="top: ?(-?\d(?:\.\d+)?)em;">(.+?)<\/span>/g;
-				// .replace(reoohfloat, function(match,p1,p2){
-				// 	if (+p1 > 0) {
-				// 		return match.replace(reoohfloat,'[sup]$2[/sup]');
-				// 	} else if (+p1 < 0) {
-				// 		return match.replace(reoohfloat,'[sub]$2[/sub]');
-				// 	} else {
-				// 		return match.replace(reoohfloat,'$2');
-				// 	}
-				// })
 	this.bbm = this.toBbcode(snowmeme);
 	this.bbdiv.value = '[quote="[url=http://xkcd.modularthought.com/ottomeme/]OTToMeme[/url]"][center]'+this.bbfr+this.bbm+'[/center][/quote]';
 }
 OTToMeme.selectIt = function() {
-	this.bbdiv.select();
+	OTToMeme.bbdiv.select();
 }
 OTToMeme.addSelect = function() {
 	/* creates a text select button with onclick event */
@@ -50,10 +62,10 @@ OTToMeme.addSelect = function() {
 	document.getElementById('bbselect').addEventListener('click',OTToMeme.selectIt);
 };
 document.addEventListener('DOMContentLoaded', OTToMeme.addSelect);
-OTToMeme.re_u = /_(.*?)_/g;
-OTToMeme.re_i = /~(.*?)~/g;
-OTToMeme.re_b = /[*](.*?)[*]/g;
-OTToMeme.re_l = /\=(.*?)\=/g;
+OTToMeme.re_u = /_(.+?)_/g;
+OTToMeme.re_i = /~(.+?)~/g;
+OTToMeme.re_b = /[*](.+?)[*]/g;
+OTToMeme.re_l = /\=(.+?)\=/g;
 OTToMeme.re_s = /^#(.*?)#/g;
 OTToMeme.re_e = /%([\da-fA-F]{2})/g;
 OTToMeme.re__ = / {2,}/g;
