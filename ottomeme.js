@@ -60,11 +60,11 @@ var OTToMeme = {
 	, trail: 0
 	, trackdip: {dip: (new Date()).getDate() - 1, posted: false, length: 0, lefth: 0}
 		/* used for special postprocess "dip" */
-	, online: (location.protocol.indexOf(/^https?:/) === 0) /* a boolean used mainly for offline testing of localStorage (disabled) */
+	, online: (/^https?:/.test(location.protocol)) /* a boolean used mainly for offline testing of localStorage (disabled) */
 	, manifest: {
 		/* used to allow downloading of updated files when using localStorage.
 		   They're just date stamps for each stored file. They need updated each time the files are changed. */
-		    classes: "20140918"+"1657"
+		    classes: "20140919"+"1615"
 		 , template: "20140919"+"1235"
 		, templateh: "20140918"+"0836"
 		   , frames: "20140831"+"1713"
