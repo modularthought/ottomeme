@@ -23,10 +23,10 @@ if (!window.addEventListener) {
 	/* needs tested */
 	window.addEventListener = function(eventtype,callback,alwaysfalse){
 		window.attachEvent("on"+eventtype, callback);
-	}
+	};
 	window.removeEventListener = function(eventtype,callback,alwaysfalse){
 		window.detachEvent("on"+eventtype, callback);
-	}
+	};
 };
 if (!Array.isArray) {
 	/* shiv for IE<9 */
