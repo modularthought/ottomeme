@@ -137,19 +137,24 @@ OTToMeme.getImage = function(xcap,xhistory){
 	xhr.send(null);
 }
 OTToMeme.setURL = function(fno){
-	/* returns the url (tat or time) and subfolder plus filename (minus .png) */
-	if (/^prickly/.test(fno[1])) return this.taturl + (this.online?'':'pricklymolp/') + fno[1] + fno[0];
-	if (/^POTM/.test(fno[1])) return this.taturl + (this.online?'':'potm/') + fno[1] + fno[0];
-	if (/^lucky/.test(fno[1])) return this.taturl + (this.online?'':'lucky/') + fno[1] + fno[0];
-	if (/^bean[y2]/.test(fno[1])) return this.taturl + (this.online?'':'beanies/') + fno[1] + fno[0];
-	if (/^t1i/.test(fno[1])) return this.taturl + (this.online?'':'t1i/') + fno[1] + fno[0];
+	/* returns the url (tat or time) plus filename (minus .png) */
+	if (/^prickly|^POTM|^lucky|^bean[y2]|^t1i/.test(fno[1])) return this.taturl + fno[1] + fno[0];
 	return (fno[0] === 1 || fno[0] == "256a" || fno[0] == "257a" || fno[0] == "258a") ? "../timedragson/img/"+fno[1] : this.url+fno[1];
-		/* this check is for apocryphal frames and frame 1. none are available from xkcd */
+		/* this check is for apocryphal frames and frame 1. none are available from xkcd and therefore are hosted @xkcd.modularthought.com */
 }
 OTToMeme.setTitle = function(frn){
 	/* like the above, a match is found to indicate the frame number and tat status for use with the alt tag */
-	if (/^prickly|^POTM|^lucky|^bean[y2]|^t1i/.test(frn)) {
-		return 'Time After "Time" ('+frn.match(/^prickly|^POTM|^lucky|^bean[y2]|^t1i/)[0]+')';
+	var tatxt = 'Time After "Time" ';
+	if (/^prickly/.test(frn)) {
+		return tatxt+'(Pricklymolp)';
+	} else if (/^POTM/.test(frn)) {
+		return tatxt+'(POTM)';
+	} else if (/^lucky/.test(frn)) {
+		return tatxt+'(Lucky)';
+	} else if (/^bean[y2]/.test(frn)) {
+		return tatxt+'(Beanies)';
+	} else if (/^t1i/.test(frn)) {
+		return tatxt+'(Time 1+i)';
 	} else {
 		return '1190: "Time"';
 	}

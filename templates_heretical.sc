@@ -19,6 +19,8 @@ template growontrees:
 template noxharmed:
 # @azule. American Human Association declaration at the end of movies that featured animals.
 NO [MOLPIES@0.1, noun-plural--animal] WERE [HARMED, verb_tr-past--negative@0.3] IN THE MAKING OF [noun_definite/<defize>, noun_mass, THIS MEME].
+template taze:
+DON'T [verb_tr-inf--negative] ME, BRO!
 # ---------- @mrob27 and @Link and the original Automeme's additions ----------
 template e404:
 ^#[404-NOT FOUND@0.33, 408-REQUEST TIMEOUT@0.5, 503-UNAVAILABLE]#$[$0/-.*$//] - [noun, noun_character] [$0/^.*-//]

@@ -24,6 +24,9 @@ if (!window.addEventListener) {
 	window.addEventListener = function(eventtype,callback,alwaysfalse){
 		window.attachEvent("on"+eventtype, callback);
 	}
+	window.removeEventListener = function(eventtype,callback,alwaysfalse){
+		window.detachEvent("on"+eventtype, callback);
+	}
 };
 if (!Array.isArray) {
 	/* shiv for IE<9 */
@@ -66,7 +69,7 @@ var OTToMeme = {
 		   They're just date stamps for each stored file. They need updated each time the files are changed. */
 		    classes: "20140919"+"1615"
 		 , template: "20140919"+"1235"
-		, templateh: "20140918"+"0836"
+		, templateh: "20141101"+"2310"
 		   , frames: "20140831"+"1713"
 		     /* frames is the least likely to need updated */
 	}
@@ -100,14 +103,15 @@ var OTToMeme = {
 						/* GET is now an object containing property-value pairs */
 		})()
 	, url:
-		(location.protocol === 'https:' ? 'http://imgs.xkcd.com/comics/time/' :
+		(location.protocol === 'https:' ? 'https://sslimgs.xkcd.com/comics/time/' :
 		location.protocol === 'http:' ? 'http://imgs.xkcd.com/comics/time/' :
-			'../../../../Pictures/Time/hash/')
+			'../../imgs.xkcd.com/comics/time/')
 		/* image url based on protocol used by the page (such as 'file:' for offline (but it doesn't show up there) and 'https' if secure ) */
 	/* https versions unavailable from xkcd or mscha.org */
+	/* check if https://sslimgs.xkcd.com is the SSL address */
 	, taturl: (location.protocol === 'https:' ? 'http://xkcd.mscha.org/otcstories/' :
 		location.protocol === 'http:' ? 'http://xkcd.mscha.org/otcstories/' :
-			'../../../../Downloads/TimeAfterTime/')
+			'../../xkcd.mscha.org/otcstories/')
 		/* the time after time url (mscha's domain) */
 	, earray: [] /* multidimensional array for use with start() */
 	, start: function(earray){

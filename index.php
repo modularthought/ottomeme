@@ -1,7 +1,16 @@
-<?php
-$meme = "";
+<!-- <?php
+	$file = "http://mrob.com/time/automome/butan.php";
+	$meme = file_get_contents($file);
+	$meme = preg_replace('/_([^_]+)_/', '<u>$1</u>', $meme);
+    $meme = preg_replace('/[*]([^*]+)[*]/', '<em>$1</em>', $meme);
+    $meme = preg_replace('/~([^~]+)~/', '<em>$1</em>', $meme);
+    $meme = preg_replace('/@?\$([^$]+)\$@?/', '<span class="smallcap">$1</span>', $meme);
+    $meme = preg_replace('/ +\/ +/', '<br/><br/>', $meme);
+	$meme = str_replace('**', '*', $meme);
+	$meme = str_replace('__', '_', $meme);
+
 ?>
-<!DOCTYPE html>
+ --><!DOCTYPE html>
 <html>
 <head>
 	<title>OTToMeme</title>
@@ -30,7 +39,7 @@ $meme = "";
 			  degrees: 70, 74, 76, 78, 80, 83, 90
 			 -->
 		</svg>
-		<span id="memeloc"><span id="memetxt">WAIT FOR IT.<br/><br/>CHECKING FOR MUSTARD.<noscript><?=$meme?></noscript><!-- noscript will replace "WAIT FOR IT..." when php is ready --></span></span>
+		<span id="memeloc"><span id="memetxt">WAIT FOR IT.<br/><br/>CHECKING FOR MUSTARD.<!-- noscript will replace "WAIT FOR IT..." when php is ready --></span></span><noscript><?=$meme?></noscript>
 		<!-- integrate http://mrob.com/time/automome/butan.php into "memetxt" through a php call. this is temporary until I can get a native OTToMeme perl or php implementation installed -->
 	</div>
 	<div id="sharing">
